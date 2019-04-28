@@ -14,7 +14,7 @@
 
 (define (tickshot command-line)
   (if (and (file-not-exists? (save-path))
-	   (file-writable? home-directory))
+	   (file-writable? base-path))
       (create-directory (save-path)))
   (if (and (file-exists? (save-path))
 	   (file-directory? (save-path)))
