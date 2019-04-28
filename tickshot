@@ -1,0 +1,25 @@
+#!/usr/bin/scsh \
+-o srfi-28 -o srfi-8 -e tickshot -s
+!#
+
+(define base-path home-directory)
+(define save-dir "screenshots")
+
+(define (save-path)
+  (format "~a/~a" base-path save-dir))
+
+(define (ticktime)
+  (receive (time ticks) (time+ticks)
+    (format "~a~a" time ticks)))
+
+(define (tickshot command-line)
+  (if (and (file-not-exists? (save-path))
+	   (file-writable? home-directory))
+      (create-directory (save-path)))
+  (if (and (file-exists? (save-path))
+	   (file-directory? (save-path)))
+      (exec-epf (scrot
+		 ,(format "~a/~a.png" (save-path) (ticktime))))
+      (begin
+	(display "Could not create screenshot directory~%" (error-output-port))
+	(exit 1))))
